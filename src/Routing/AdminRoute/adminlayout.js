@@ -1,4 +1,4 @@
-import { Outlet, outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import AdminNavigation from "../../Admin/Components/AdminNavigation";
 
 const AdminLayout = () => {

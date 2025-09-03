@@ -1,153 +1,125 @@
-/* Main container - already in your main CSS */
+/* FoodItemForm.css */
 .main-container {
   display: flex;
-  min-height: 100vh;
-  padding-top: 70px; /* Navbar height */
-  background-color: #111827; /* Main background */
-  color: #ffffff;
-}
-
-.content-section {
-  flex: 1;
+  justify-content: center;
+  align-items: flex-start;
   padding: 20px;
-  background: #111827; /* Ensure background coverage */
+  min-height: 100vh;
+  background-color: #f5f5f5;
 }
 
-/* Food Form Container - FIXED */
 .food-form-container {
-  background: #1f2937;
+  background: white;
   padding: 25px;
-  border-radius: 8px;
-  border: 1px solid #374151;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-  /* REMOVED padding-top: 70px - this was causing the issue */
-  /* REMOVED margin: 20px - using content-section padding instead */
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
 }
 
 .food-form-container h2 {
-  color: #ffffff;
-  margin-bottom: 25px;
   text-align: center;
-  font-size: 1.5rem;
+  margin-bottom: 25px;
+  color: #333;
   font-weight: 600;
-  border-bottom: 1px solid #374151;
-  padding-bottom: 15px;
 }
 
 .food-form {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 20px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
+  gap: 8px;
 }
 
 .form-group label {
-  color: #d1d5db;
-  margin-bottom: 8px;
   font-weight: 500;
-  font-size: 0.9rem;
+  color: #444;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
-  padding: 12px 16px;
-  border: 1px solid #374151;
+  padding: 12px;
+  border: 1px solid #ddd;
   border-radius: 6px;
-  background: #111827;
-  color: #ffffff;
-  font-size: 1rem;
-  transition: all 0.2s ease;
+  font-size: 16px;
+  transition: border-color 0.3s;
 }
 
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
-.form-group input::placeholder,
-.form-group textarea::placeholder {
-  color: #6b7280;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
 }
 
 .form-group input.error,
 .form-group select.error,
 .form-group textarea.error {
-  border-color: #ef4444;
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  border-color: #e74c3c;
 }
 
 .error-message {
-  color: #ef4444;
-  font-size: 0.8rem;
-  margin-top: 5px;
-  font-weight: 500;
+  color: #e74c3c;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.checkbox-group {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+
+.checkbox-group input {
+  width: auto;
+  margin-right: 8px;
 }
 
 .form-actions {
-  grid-column: 1 / -1;
   display: flex;
   gap: 15px;
-  justify-content: flex-end;
   margin-top: 10px;
-  padding-top: 20px;
-  border-top: 1px solid #374151;
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
 }
 
 .btn-primary {
-  background: #3b82f6;
+  background-color: #4a90e2;
   color: white;
-  border: none;
-  padding: 12px 30px;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
 }
 
 .btn-primary:hover {
-  background: #2563eb;
-  transform: translateY(-1px);
+  background-color: #3a80d2;
 }
 
 .btn-secondary {
-  background: #6b7280;
-  color: white;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 6px;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  background-color: #f0f0f0;
+  color: #555;
 }
 
 .btn-secondary:hover {
-  background: #4b5563;
-  transform: translateY(-1px);
+  background-color: #e0e0e0;
 }
 
-/* Responsive design */
-@media (max-width: 768px) {
-  .content-section {
-    padding: 15px;
-  }
-
+@media (max-width: 600px) {
   .food-form-container {
     padding: 20px;
-  }
-
-  .food-form {
-    grid-template-columns: 1fr;
-    gap: 15px;
   }
 
   .form-actions {

@@ -9,11 +9,12 @@ import FoodItemForm from "../../Admin/FoodItemForm";
 export default function adminroute() {
   return (
     <Route element={<AdminLayout />}>
-      <Route path="/" element={<AdminDashboard />} />
+      <Route path="/admindash" element={<AdminDashboard />} />
       <Route path="/item" element={<ItemManagement />} />
       <Route path="/order" element={<OrderManagement />} />
       <Route path="/analytics" element={<Analytics />} />
       <Route path="/form" element={<FoodItemForm />} />
+      <Route path="/form/ :id" element={<FoodItemForm />} />
     </Route>
   );
 }

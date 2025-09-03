@@ -1,68 +1,152 @@
-import React from "react";
-import { useForm } from "react-hook-form";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import instance from "../axios/axiosinstance";
 import "./FoodItemForm.css";
 
-function FoodItemForm({ onSubmit, editingItem }) {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    setValue,
-  } = useForm();
+function FoodItemForm() {
+  const [formData, setFormData] = useState({
+    name: "",
+    category: "",
+    price: "",
+    description: "",
+    quantity: "",
+  });
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const isEditing = !!id;
 
-  React.useEffect(() => {
-    if (editingItem) {
-      Object.keys(editingItem).forEach((key) => {
-        setValue(key, editingItem[key]);
-      });
+  useEffect(() => {
+    if (id) {
+      fetchItemData();
     }
-  }, [editingItem, setValue]);
+  }, [id]);
 
-  const onFormSubmit = (data) => {
-    onSubmit(data);
-    if (!editingItem) reset();
+  const fetchItemData = async () => {
+    try {
+      setLoading(true);
+      const response = await instance.get(`/api/food/${id}`);
+      const item = response.data;
+
+      setFormData({
+        name: item.name || "",
+        category: item.category || "",
+        price: item.price || "",
+        description: item.description || "",
+        quantity: item.quantity || "",
+      });
+    } catch (error) {
+      console.error("Error fetching item:", error);
+      alert("Failed to load item data");
+      navigate("/items");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!formData.name.trim()) newErrors.name = "Item name is required";
+    if (!formData.category.trim()) newErrors.category = "Category is required";
+    if (!formData.price || parseFloat(formData.price) <= 0)
+      newErrors.price = "Price must be greater than 0";
+    if (!formData.quantity || parseInt(formData.quantity) < 0)
+      newErrors.quantity = "Quantity cannot be negative";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    setLoading(true);
+    try {
+      const payload = {
+        name: formData.name.trim(),
+        category: formData.category.trim(),
+        price: parseFloat(formData.price),
+        description: formData.description.trim(),
+        quantity: parseInt(formData.quantity),
+        isAvailable: parseInt(formData.quantity) > 0,
+      };
+
+      let response;
+      if (isEditing) {
+        response = await instance.put(`/api/food/update/${id}`, payload);
+      } else {
+        response = await instance.post("/api/food/create", payload);
+      }
+
+      console.log("Item saved successfully:", response.data);
+      alert(
+        isEditing ? "Item updated successfully!" : "Item created successfully!"
+      );
+      navigate("/items");
+    } catch (error) {
+      console.error("Error saving item:", error);
+      alert(
+        "Error: " + (error.response?.data?.message || "Failed to save item")
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCancel = () => {
+    navigate("/items");
   };
 
   return (
     <div className="main-container">
       <div className="food-form-container">
-        <h2>{editingItem ? "Edit Food Item" : "Add New Food Item"}</h2>
+        <h2>{isEditing ? "Edit Food Item" : "Add New Food Item"}</h2>
 
-        <form onSubmit={handleSubmit(onFormSubmit)} className="food-form">
+        <form onSubmit={handleSubmit} className="food-form">
           <div className="form-group">
             <label>Item Name *</label>
             <input
-              {...register("name", {
-                required: "Item name is required",
-                minLength: {
-                  value: 2,
-                  message: "Name must be at least 2 characters",
-                },
-              })}
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
               className={errors.name ? "error" : ""}
               placeholder="Enter item name"
+              disabled={loading}
             />
             {errors.name && (
-              <span className="error-message">{errors.name.message}</span>
+              <span className="error-message">{errors.name}</span>
             )}
           </div>
 
           <div className="form-group">
             <label>Category *</label>
-            <select
-              {...register("category", { required: "Category is required" })}
+            <input
+              type="text"
+              name="category"
+              value={formData.category}
+              onChange={handleChange}
               className={errors.category ? "error" : ""}
-            >
-              <option value="">Select Category</option>
-              <option value="Burgers">Burgers</option>
-              <option value="Pizza">Pizza</option>
-              <option value="Salads">Salads</option>
-              <option value="Pasta">Pasta</option>
-              <option value="Beverages">Beverages</option>
-            </select>
+              placeholder="Enter category"
+              disabled={loading}
+            />
             {errors.category && (
-              <span className="error-message">{errors.category.message}</span>
+              <span className="error-message">{errors.category}</span>
             )}
           </div>
 
@@ -72,15 +156,15 @@ function FoodItemForm({ onSubmit, editingItem }) {
               type="number"
               step="0.01"
               min="0"
-              {...register("price", {
-                required: "Price is required",
-                min: { value: 0.01, message: "Price must be greater than 0" },
-              })}
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
               className={errors.price ? "error" : ""}
               placeholder="0.00"
+              disabled={loading}
             />
             {errors.price && (
-              <span className="error-message">{errors.price.message}</span>
+              <span className="error-message">{errors.price}</span>
             )}
           </div>
 
@@ -88,39 +172,13 @@ function FoodItemForm({ onSubmit, editingItem }) {
             <label>Description</label>
             <textarea
               rows="3"
-              {...register("description", {
-                maxLength: {
-                  value: 200,
-                  message: "Description cannot exceed 200 characters",
-                },
-              })}
-              className={errors.description ? "error" : ""}
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
               placeholder="Brief description of the item"
+              maxLength="200"
+              disabled={loading}
             />
-            {errors.description && (
-              <span className="error-message">
-                {errors.description.message}
-              </span>
-            )}
-          </div>
-
-          <div className="form-group">
-            <label>Availability *</label>
-            <select
-              {...register("availability", {
-                required: "Availability is required",
-              })}
-              className={errors.availability ? "error" : ""}
-            >
-              <option value="">Select Status</option>
-              <option value="available">Available</option>
-              <option value="unavailable">Unavailable</option>
-            </select>
-            {errors.availability && (
-              <span className="error-message">
-                {errors.availability.message}
-              </span>
-            )}
           </div>
 
           <div className="form-group">
@@ -128,31 +186,34 @@ function FoodItemForm({ onSubmit, editingItem }) {
             <input
               type="number"
               min="0"
-              {...register("quantity", {
-                required: "Stock quantity is required",
-                min: { value: 0, message: "Quantity cannot be negative" },
-              })}
+              name="quantity"
+              value={formData.quantity}
+              onChange={handleChange}
               className={errors.quantity ? "error" : ""}
               placeholder="0"
+              disabled={loading}
             />
             {errors.quantity && (
-              <span className="error-message">{errors.quantity.message}</span>
+              <span className="error-message">{errors.quantity}</span>
             )}
           </div>
 
           <div className="form-actions">
-            <button type="submit" className="btn-primary">
-              {editingItem ? "Update Item" : "Add Item"}
+            <button type="submit" className="btn-primary" disabled={loading}>
+              {loading
+                ? "Processing..."
+                : isEditing
+                ? "Update Item"
+                : "Add Item"}
             </button>
-            {editingItem && (
-              <button
-                type="button"
-                className="btn-secondary"
-                onClick={() => reset()}
-              >
-                Cancel Edit
-              </button>
-            )}
+            <button
+              type="button"
+              className="btn-secondary"
+              onClick={handleCancel}
+              disabled={loading}
+            >
+              Cancel
+            </button>
           </div>
         </form>
       </div>
