@@ -6,40 +6,58 @@ import "./FoodItemForm.css";
 function FoodItemForm() {
   const [formData, setFormData] = useState({
     name: "",
-    category: "",
+    categoryId: "",
     price: "",
     description: "",
     quantity: "",
+    isActive: "true",
   });
+  const [categories, setCategories] = useState([]);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
   const navigate = useNavigate();
   const { id } = useParams();
-  const isEditing = !!id;
 
   useEffect(() => {
     if (id) {
-      fetchItemData();
+      setIsEditMode(true);
+      fetchItemData(id);
     }
   }, [id]);
 
-  const fetchItemData = async () => {
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await instance.get("/api/category");
+        console.log("Fetched categories:", response.data.data);
+        setCategories(response.data.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  const fetchItemData = async (itemId) => {
     try {
       setLoading(true);
-      const response = await instance.get(`/api/food/${id}`);
-      const item = response.data;
+      const response = await instance.get(`/api/food/${itemId}`);
+      console.log(response.data.data);
+      const item = response.data.data;
 
       setFormData({
         name: item.name || "",
-        category: item.category || "",
+        categoryId: item.categoryId || "",
         price: item.price || "",
         description: item.description || "",
         quantity: item.quantity || "",
+        isActive: item.isActive ? "true" : "false",
       });
     } catch (error) {
-      console.error("Error fetching item:", error);
+      console.error("Error fetching item data:", error);
       alert("Failed to load item data");
-      navigate("/items");
     } finally {
       setLoading(false);
     }
@@ -61,7 +79,8 @@ function FoodItemForm() {
     const newErrors = {};
 
     if (!formData.name.trim()) newErrors.name = "Item name is required";
-    if (!formData.category.trim()) newErrors.category = "Category is required";
+    if (!formData.categoryId.trim())
+      newErrors.categoryId = "Category is required";
     if (!formData.price || parseFloat(formData.price) <= 0)
       newErrors.price = "Price must be greater than 0";
     if (!formData.quantity || parseInt(formData.quantity) < 0)
@@ -79,27 +98,32 @@ function FoodItemForm() {
     try {
       const payload = {
         name: formData.name.trim(),
-        category: formData.category.trim(),
+        categoryId: formData.categoryId,
         price: parseFloat(formData.price),
         description: formData.description.trim(),
         quantity: parseInt(formData.quantity),
-        isAvailable: parseInt(formData.quantity) > 0,
+        isActive: formData.isActive === "true",
       };
 
+      console.log("Submitting payload:", payload);
+
       let response;
-      if (isEditing) {
+      if (isEditMode) {
         response = await instance.put(`/api/food/update/${id}`, payload);
+        console.log("Item updated successfully:", response.data.data);
+        alert("Item updated successfully!");
       } else {
         response = await instance.post("/api/food/create", payload);
+        console.log("Item created successfully:", response.data);
+        alert("Item created successfully!");
       }
 
-      console.log("Item saved successfully:", response.data);
-      alert(
-        isEditing ? "Item updated successfully!" : "Item created successfully!"
-      );
-      navigate("/items");
+      navigate("/item");
     } catch (error) {
-      console.error("Error saving item:", error);
+      console.error(
+        "Error saving item:",
+        error.response?.data || error.message
+      );
       alert(
         "Error: " + (error.response?.data?.message || "Failed to save item")
       );
@@ -109,13 +133,13 @@ function FoodItemForm() {
   };
 
   const handleCancel = () => {
-    navigate("/items");
+    navigate("/item");
   };
 
   return (
     <div className="main-container">
       <div className="food-form-container">
-        <h2>{isEditing ? "Edit Food Item" : "Add New Food Item"}</h2>
+        <h2>{isEditMode ? "Edit Food Item" : "Add New Food Item"}</h2>
 
         <form onSubmit={handleSubmit} className="food-form">
           <div className="form-group">
@@ -136,22 +160,27 @@ function FoodItemForm() {
 
           <div className="form-group">
             <label>Category *</label>
-            <input
-              type="text"
-              name="category"
-              value={formData.category}
+            <select
+              name="categoryId"
+              value={formData.categoryId}
               onChange={handleChange}
-              className={errors.category ? "error" : ""}
-              placeholder="Enter category"
+              className={errors.categoryId ? "error" : ""}
               disabled={loading}
-            />
-            {errors.category && (
-              <span className="error-message">{errors.category}</span>
+            >
+              <option value="">-- Select Category --</option>
+              {categories.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.name}
+                </option>
+              ))}
+            </select>
+            {errors.categoryId && (
+              <span className="error-message">{errors.categoryId}</span>
             )}
           </div>
 
           <div className="form-group">
-            <label>Price ($) *</label>
+            <label>Price *</label>
             <input
               type="number"
               step="0.01"
@@ -198,11 +227,27 @@ function FoodItemForm() {
             )}
           </div>
 
+          <div className="form-group">
+            <label>Item Status *</label>
+            <select
+              name="isActive"
+              value={formData.isActive}
+              onChange={handleChange}
+              disabled={loading}
+            >
+              <option value="true">Active (Visible to customers)</option>
+              <option value="false">Inactive (Hidden from customers)</option>
+            </select>
+            <p className="dropdown-help">
+              Active items will be visible to customers
+            </p>
+          </div>
+
           <div className="form-actions">
             <button type="submit" className="btn-primary" disabled={loading}>
               {loading
                 ? "Processing..."
-                : isEditing
+                : isEditMode
                 ? "Update Item"
                 : "Add Item"}
             </button>

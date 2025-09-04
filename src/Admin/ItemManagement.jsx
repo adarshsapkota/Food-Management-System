@@ -64,6 +64,9 @@ function ItemManagement() {
           <Link to="/form" className="btn-add">
             + Add New Item
           </Link>
+          <Link to="/category" className="btn-add">
+            Category
+          </Link>
         </div>
 
         {error && <div className="error-message global-error">{error}</div>}
@@ -87,7 +90,7 @@ function ItemManagement() {
                     <td className="item-name">{item.name}</td>
                     <td className="item-category">{item.categoryName}</td>
                     <td className="item-description">{item.description}</td>
-                    <td className="item-price">${item.price?.toFixed(2)}</td>
+                    <td className="item-price">{item.price?.toFixed(2)}</td>
                     <td className="item-quantity">{item.quantity}</td>
                     <td className="item-actions">
                       <button

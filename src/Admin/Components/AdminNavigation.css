@@ -39,6 +39,7 @@
   color: #d1d5db;
   font-size: 0.9rem;
   border-bottom: 3px solid transparent;
+  text-decoration: none;
 }
 
 .link:hover {
