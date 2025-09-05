@@ -1,0 +1,12 @@
+.main-container {
+  display: flex;
+  min-height: 100vh;
+  padding-top: 70px;
+  background-color: #111827;
+  color: #ffffff;
+}
+.analytics-container {
+  flex: 1;
+  padding: 30px;
+  background: #111827;
+}

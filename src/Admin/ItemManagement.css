@@ -1,0 +1,131 @@
+.main-container {
+  display: flex;
+  min-height: 100vh;
+  padding-top: 70px;
+  background-color: #111827;
+  color: #ffffff;
+}
+
+.items-table-container {
+  flex: 1;
+  padding: 30px;
+  background: #111827;
+}
+
+.items-table-container h2 {
+  color: #ffffff;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.table-wrapper {
+  margin-top: 25px;
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #374151;
+  background: #1f2937;
+}
+
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #1f2937;
+  color: #d1d5db;
+}
+
+.items-table th {
+  background: #374151;
+  padding: 16px 20px;
+  text-align: left;
+  font-weight: 600;
+  color: #ffffff;
+  border-bottom: 2px solid #4b5563;
+  font-size: 1rem;
+}
+
+.items-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid #374151;
+  color: #d1d5db;
+}
+
+.items-table tr:hover {
+  background: #374151;
+}
+
+.item-name {
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.item-category {
+  color: #60a5fa;
+  font-weight: 500;
+}
+
+.item-description {
+  color: #9ca3af;
+}
+
+.item-quantity {
+  font-weight: 600;
+  color: #10b981;
+}
+
+.item-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-add {
+  text-decoration: none;
+  background: #10b981;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+.btn-add:hover {
+  background: #10b981c1;
+  transform: translateY(-1px);
+}
+
+.btn-update {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-update:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+.btn-delete {
+  background: #ef4444;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-delete:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+}

@@ -1,0 +1,74 @@
+.main-content {
+  display: flex;
+  min-height: 100vh;
+  padding-top: 70px;
+  background-color: #111827;
+  color: #ffffff;
+}
+
+.order-container {
+  flex: 1;
+  padding: 30px;
+  background: #111827;
+}
+
+.order-container h2 {
+  color: #ffffff;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid #374151;
+  background: #1f2937;
+}
+
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #1f2937;
+  color: #d1d5db;
+}
+
+.order-table th {
+  background: #374151;
+  padding: 16px 20px;
+  text-align: left;
+  font-weight: 600;
+  color: #ffffff;
+  border-bottom: 2px solid #4b5563;
+  font-size: 1rem;
+}
+
+.order-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid #374151;
+  color: #d1d5db;
+}
+
+.order-table tr:hover {
+  background: #374151;
+}
+
+.order-name {
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.order-category {
+  color: #60a5fa;
+  font-weight: 500;
+}
+
+.order-id {
+  color: #9ca3af;
+}
+
+.order-price {
+  font-weight: 600;
+  color: #10b981;
+}
