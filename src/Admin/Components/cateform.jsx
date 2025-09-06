@@ -1,16 +1,31 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import instance from "../../axios/axiosinstance";
 import "./Cateform.css";
 
 function Cateform() {
   const [formData, setFormData] = useState({
+    id: "",
     name: "",
     description: "",
   });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state && location.state.category) {
+      const category = location.state.category;
+      setFormData({
+        id: category.id,
+        name: category.name,
+        description: category.description,
+      });
+      setIsEditing(true);
+    }
+  }, [location.state]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,16 +60,25 @@ function Cateform() {
         description: formData.description.trim(),
       };
 
-      const response = await instance.post("/api/category/create", payload);
+      let response;
+      if (isEditing) {
+        response = await instance.put(
+          `/api/category/update/${formData.id}`,
+          payload
+        );
+        console.log("Category updated:", response.data);
+        alert("Category updated successfully!");
+      } else {
+        response = await instance.post("/api/category/create", payload);
+        console.log("Category created:", response.data);
+        alert("Category created successfully!");
+      }
 
-      console.log("Category created:", response.data);
-      alert("Category created successfully!");
       navigate("/category");
     } catch (error) {
-      console.error("Error creating category:", error);
+      console.error("Error saving category:", error);
       alert(
-        "Error: " +
-          (error.response?.data?.message || "Failed to create category")
+        "Error: " + (error.response?.data?.message || "Failed to save category")
       );
     } finally {
       setLoading(false);
@@ -68,7 +92,7 @@ function Cateform() {
   return (
     <div className="main-container">
       <div className="food-form-container">
-        <h2>Add New Category</h2>
+        <h2>{isEditing ? "Edit Category" : "Add New Category"}</h2>
 
         <form onSubmit={handleSubmit} className="food-form">
           <div className="form-group">
@@ -106,7 +130,11 @@ function Cateform() {
 
           <div className="form-actions">
             <button type="submit" className="btn-add" disabled={loading}>
-              {loading ? "Processing..." : "Add Category"}
+              {loading
+                ? "Processing..."
+                : isEditing
+                ? "Update Category"
+                : "Add Category"}
             </button>
             <button
               type="button"

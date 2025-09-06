@@ -84,27 +84,30 @@ function LogIn() {
   return (
     <div className="login-container">
       <form onSubmit={handleSubmit} className="login-form">
-        <h2>Welcome Back</h2>
+        <h2 className="login-title">Welcome Back</h2>
 
         {error && (
-          <div className="error-message">
+          <div className="login-error-message">
             {error}
             <button
               type="button"
               onClick={() => setError("")}
-              className="error-close"
+              className="login-error-close"
             >
               ×
             </button>
           </div>
         )}
 
-        <div className="form-group">
-          <label htmlFor="email">Email</label>
+        <div className="login-form-group">
+          <label htmlFor="email" className="login-label">
+            Email
+          </label>
           <input
             type="email"
             id="email"
             name="email"
+            className="login-input"
             value={formData.email}
             onChange={handleChange}
             required
@@ -113,12 +116,15 @@ function LogIn() {
           />
         </div>
 
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
+        <div className="login-form-group">
+          <label htmlFor="password" className="login-label">
+            Password
+          </label>
           <input
             type="password"
             id="password"
             name="password"
+            className="login-input"
             value={formData.password}
             onChange={handleChange}
             required
@@ -129,12 +135,12 @@ function LogIn() {
 
         <button
           type="submit"
-          className={`login-button ${loading ? "loading" : ""}`}
+          className={`login-button ${loading ? "login-loading" : ""}`}
           disabled={loading || !formData.email || !formData.password}
         >
           {loading ? (
             <>
-              <span className="spinner"></span>
+              <span className="login-spinner"></span>
               Logging in...
             </>
           ) : (
@@ -146,9 +152,6 @@ function LogIn() {
           <span>
             Don't have an account? <Link to="/signup">Sign Up</Link>
           </span>
-          <Link to="/forgot-password" className="forgot-password">
-            Forgot password?
-          </Link>
         </div>
       </form>
     </div>
