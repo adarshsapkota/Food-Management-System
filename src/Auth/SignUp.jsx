@@ -72,12 +72,12 @@ function SignUp() {
   return (
     <div className="signup-container">
       <form onSubmit={handleSubmit} className="signup-form">
-        <h2>Create Account</h2>
+        <h2 className="signup-title">Create Account</h2>
 
-        {error && <div className="error-message">{error}</div>}
+        {error && <div className="signup-error-message">{error}</div>}
 
-        <div className="form-group">
-          <label>Full Name</label>
+        <div className="signup-form-group">
+          <label className="signup-label">Full Name</label>
           <input
             type="text"
             name="name"
@@ -85,33 +85,36 @@ function SignUp() {
             onChange={handleChange}
             required
             minLength="3"
+            className="signup-input"
           />
         </div>
 
-        <div className="form-group">
-          <label>Email</label>
+        <div className="signup-form-group">
+          <label className="signup-label">Email</label>
           <input
             type="email"
             name="email"
             value={formData.email}
             onChange={handleChange}
             required
+            className="signup-input"
           />
         </div>
 
-        <div className="form-group">
-          <label>Phone Number</label>
+        <div className="signup-form-group">
+          <label className="signup-label">Phone Number</label>
           <input
             type="tel"
             name="phoneNumber"
             value={formData.phoneNumber}
             onChange={handleChange}
             required
+            className="signup-input"
           />
         </div>
 
-        <div className="form-group">
-          <label>Password</label>
+        <div className="signup-form-group">
+          <label className="signup-label">Password</label>
           <input
             type="password"
             name="password"
@@ -119,17 +122,19 @@ function SignUp() {
             onChange={handleChange}
             required
             minLength="8"
+            className="signup-input"
           />
         </div>
 
-        <div className="form-group">
-          <label>Confirm Password</label>
+        <div className="signup-form-group">
+          <label className="signup-label">Confirm Password</label>
           <input
             type="password"
             name="confirmPassword"
             value={formData.confirmPassword}
             onChange={handleChange}
             required
+            className="signup-input"
           />
         </div>
 
@@ -137,8 +142,8 @@ function SignUp() {
           {loading ? "Registering..." : "Sign Up"}
         </button>
 
-        <div className="login-link">
-          Already have an account? <Link to="/LogIn">Log In</Link>
+        <div className="signup-login-link">
+          Already have an account? <Link to="/">Log In</Link>
         </div>
       </form>
     </div>

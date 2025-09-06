@@ -1,12 +1,111 @@
-.main-container {
-  display: flex;
-  min-height: 100vh;
-  padding-top: 70px;
-  background-color: #111827;
-  color: #ffffff;
-}
-.analytics-container {
+.main-content {
+  margin-top: 50px;
   flex: 1;
-  padding: 30px;
-  background: #111827;
+  padding: 20px;
+  background-color: #111827;
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #d1d5db;
+}
+
+.analytics-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.analytics-container h2 {
+  font-size: 1.8rem;
+  color: #ffffff;
+  margin-bottom: 25px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.stats-card {
+  background: #1f2937;
+  padding: 25px;
+  border-radius: 8px;
+  border: 1px solid #374151;
+  text-align: center;
+  transition: all 0.2s ease;
+  margin-bottom: 25px;
+}
+
+.stats-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.stats-card h3 {
+  font-size: 1rem;
+  color: #9ca3af;
+  margin-bottom: 15px;
+  font-weight: 500;
+}
+
+.stats-card .revenue {
+  font-size: 28px;
+  font-weight: bold;
+  color: #10b981;
+}
+
+.stats-card .orders {
+  font-size: 28px;
+  font-weight: bold;
+  color: #3b82f6;
+}
+
+.stats-card .customers {
+  font-size: 28px;
+  font-weight: bold;
+  color: #8b5cf6;
+}
+
+/* 2x2 Grid Layout for Charts */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2-column fixed layout */
+  gap: 20px;
+}
+
+.chart-card {
+  background: #1f2937;
+  padding: 25px;
+  border-radius: 8px;
+  border: 1px solid #374151;
+}
+
+.chart-card h3 {
+  font-size: 1.1rem;
+  color: #ffffff;
+  margin-bottom: 20px;
+  text-align: center;
+  font-weight: 600;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #374151;
+}
+
+.error {
+  color: #ef4444;
+  font-size: 16px;
+  margin-top: 15px;
+  text-align: center;
+  padding: 15px;
+  background: #1f2937;
+  border-radius: 8px;
+  border: 1px solid #ef4444;
+}
+
+@media (max-width: 768px) {
+  .stats-card {
+    margin-bottom: 20px;
+  }
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .analytics-container h2 {
+    font-size: 1.5rem;
+  }
 }
