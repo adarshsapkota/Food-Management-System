@@ -15,8 +15,8 @@ function OrderManagement() {
     try {
       setLoading(true);
       const response = await instance.get("/api/admin/order");
-      console.log("Fetched orders: ", response.data.data.content);
-      setOrders(response.data.data.content);
+      console.log("Fetched orders: ", response.data.data);
+      setOrders(response.data.data);
       setError(null);
     } catch (error) {
       console.error("Error fetching orders:", error);
@@ -43,7 +43,7 @@ function OrderManagement() {
   return (
     <div className="main-content">
       <div className="order-container">
-        <h2>Order Report</h2>
+        <h2>Order's</h2>
 
         {loading ? (
           <p className="loading">Loading orders...</p>

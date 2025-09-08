@@ -16,7 +16,7 @@ function Analytics() {
 
   const fetchOrders = async () => {
     try {
-      const res = await instance.get("/api/order");
+      const res = await instance.get("/api/admin/order");
       setOrders(res.data.data);
     } catch (err) {
       console.error("Error fetching orders:", err);

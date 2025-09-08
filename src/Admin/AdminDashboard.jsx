@@ -40,7 +40,7 @@ function AdminDashboard() {
 
   const fetchOrders = async () => {
     try {
-      const res = await instance.get("/api/order");
+      const res = await instance.get("/api/admin/order");
       setOrders(res.data.data);
     } catch (err) {
       setError("Failed to fetch orders.");
@@ -105,7 +105,6 @@ function AdminDashboard() {
             )}
           </div>
 
-          {/* Top Right - Total Revenue */}
           <div className="grid-item analytics-top">
             <h2>Total Revenue</h2>
             {orders.length > 0 ? (
